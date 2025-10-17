@@ -2,10 +2,16 @@ Simple Library DB Worksheet
 Michael Dave
 
 Read the instructions for each section carefully.
+
 Step A: Redo your databases. New records will be seeded later. This is to ensure that the whole class will be working on the same records consistent enough to complete the levels discussed in this worksheet.
-DROP DATABASE simple_library_db;
+
+DROP DATABASE 
+simple_library_db;
+
 Run the following script to recreate the database and its tables:
+
 Step B: Create schema.sql and run it on your working directory using SOURCE. Or copy and paste on your MySQL Command-Line.
+
 -- schema.sql
 -- Create the database and the three required tables: Books, Members, Loans
 CREATE DATABASE IF NOT EXISTS simple_library_db;
