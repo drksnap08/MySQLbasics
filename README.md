@@ -231,3 +231,5 @@ JOIN Loans l ON b.book_id = l.book_id
 GROUP BY b.book_id
 ORDER BY times_borrowed DESC
 
+
+
