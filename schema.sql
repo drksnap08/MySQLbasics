@@ -1,39 +1,40 @@
--- Books table to store book information
+-- schema.sql
+-- Create the database and the three required tables: Books, Members, Loans
+CREATE DATABASE IF NOT EXISTS simple_library_db;
+USE simple_library_db;
+
+-- Books table (no publisher column yet; Part D includes ALTER TABLE to add that)
 CREATE TABLE Books (
-    book_id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(100) NOT NULL,
-    isbn VARCHAR(13) UNIQUE NOT NULL,
-    publication_year INT,
-    genre VARCHAR(50),
-    total_copies INT NOT NULL DEFAULT 1,
-    available_copies INT NOT NULL DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CHECK (available_copies <= total_copies)
+  book_id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  publication_year SMALLINT UNSIGNED,
+  genre ENUM('Fiction','Science','History','Biography','Children','Fantasy','Mystery','Non-Fiction','Technology','Art') DEFAULT 'Fiction',
+  is_available BOOLEAN NOT NULL DEFAULT TRUE
 );
 
--- Members table to store member information
+-- Members table
 CREATE TABLE Members (
-    member_id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    phone VARCHAR(15),
-    address VARCHAR(255),
-    join_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_active BOOLEAN DEFAULT TRUE
+  member_id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  join_date DATE NOT NULL
 );
 
--- Loans table to store book borrowing records
+-- Loans table that links Books and Members
 CREATE TABLE Loans (
-    loan_id INT PRIMARY KEY AUTO_INCREMENT,
-    book_id INT NOT NULL,
-    member_id INT NOT NULL,
-    loan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    due_date TIMESTAMP NOT NULL,
-    return_date TIMESTAMP,
-    fine_amount DECIMAL(5,2) DEFAULT 0.00,
-    FOREIGN KEY (book_id) REFERENCES Books(book_id) ON DELETE RESTRICT,
-    FOREIGN KEY (member_id) REFERENCES Members(member_id) ON DELETE RESTRICT,
-    CHECK (due_date > loan_date)
+  loan_id INT AUTO_INCREMENT PRIMARY KEY,
+  book_id INT NOT NULL,
+  member_id INT NOT NULL,
+  loan_date DATE NOT NULL,
+  return_date DATE DEFAULT NULL,
+  CONSTRAINT fk_loan_book FOREIGN KEY (book_id)
+    REFERENCES Books(book_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_loan_member FOREIGN KEY (member_id)
+    REFERENCES Members(member_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
